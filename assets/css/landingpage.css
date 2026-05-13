@@ -1,21 +1,22 @@
-/* ============================================
-   ROOT VARIABLES (TEMA KEMENKES)
-   ============================================ */
 :root {
-    /* Palet Warna Utama */
-    --kemenkes-primary: #00A99D;    /* Hijau Toska */
+    /* Palet Resmi Kemenkes */
+    --kemenkes-primary: #00A99D;    /* Hijau Toska Kemenkes */
+    --kemenkes-secondary: #FDB913;  /* Oranye Kemenkes (Aksen) */
     --kemenkes-blue: #00ADEF;       /* Biru Kemenkes */
     
-    /* Backgrounds & Text */
-    --bg-body: #F4F7FB;             /* Abu-abu biru sangat muda untuk layar belakang */
-    --bg-glass: rgba(255, 255, 255, 0.85); /* Efek kaca untuk card/header */
-    --text-main: #1E293B;           /* Biru dongker untuk teks utama */
-    --text-muted: #64748B;          /* Abu-abu untuk teks sekunder */
+    /* Background & Surface (Putih Bersih) */
+    --bg-body: #F0F4F8;             /* Abu-abu biru sangat muda (medical feel) */
+    --bg-card: #FFFFFF;             /* Putih bersih */
+    --bg-glass: rgba(255, 255, 255, 0.8);
     
-    /* Borders & Shadows */
-    --border-glass: rgba(0, 169, 157, 0.2); 
-    --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.04);
-    --shadow-hover: 0 15px 35px rgba(0, 169, 157, 0.15);
+    /* Teks */
+    --text-main: #1E293B;           /* Biru gelap pekat (bukan hitam) */
+    --text-muted: #64748B;          /* Abu-abu teks */
+    
+    /* Efek & Border */
+    --border-color: rgba(0, 169, 157, 0.15); /* Border dengan tone toska halus */
+    --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    --shadow-toska: 0 10px 20px -5px rgba(0, 169, 157, 0.2);
 }
 
 /* ============================================
@@ -45,29 +46,9 @@ body {
     width: 100%;
     min-height: 100vh;
     overflow-x: hidden;
-    
-    /* Background Kemenkes (Putih - Biru Muda) */
-    background: radial-gradient(circle at top right, #FFFFFF 0%, var(--bg-body) 100%);
-    color: var(--text-main); /* Mengubah warna teks dasar */
-    position: relative;
-}
-
-/* Floating Orbs (Aksen Latar Belakang) */
-.orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    z-index: -1;
-    opacity: 0.6;
-    animation: float 20s infinite ease-in-out;
-}
-/* Mengubah warna orb menjadi Toska dan Biru Kemenkes */
-.orb-1 { width: 400px; height: 400px; background: rgba(0, 169, 157, 0.15); top: -10%; left: -5%; }
-.orb-2 { width: 500px; height: 500px; background: rgba(0, 173, 239, 0.1); bottom: -10%; right: -5%; animation-delay: -5s; }
-
-@keyframes float {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-30px) scale(1.05); }
+    /* Ganti gradient gelap ke Putih-Biru Muda */
+    background: radial-gradient(circle at top right, #FFFFFF 0%, #E0F2F1 100%);
+    color: var(--text-main);
 }
 
 /* ============================================
@@ -75,35 +56,37 @@ body {
    ============================================ */
 #macos-scrollbar {
     position: fixed;
-    top: 0; /* Tambahkan ini sebagai titik awal */
-    right: 4px;
-    width: 6px;
+    right: 4px; /* Mengambang sedikit dari tepi kanan */
+    width: 6px; /* Super tipis dan elegan */
     background-color: var(--kemenkes-primary);
     border-radius: 10px;
     z-index: 9999;
-    opacity: 0;
-    transition: opacity 0.4s ease; /* Transisi HANYA untuk opacity (muncul/hilang) */
-    pointer-events: none;
-    will-change: transform, opacity; /* Beritahu GPU untuk bersiap menganimasi ini */
+    opacity: 0; /* Menghilang secara default */
+    transition: opacity 0.4s ease; /* Animasi smooth muncul/hilang */
+    pointer-events: none; /* Hanya visual, klik akan tembus ke bawahnya */
 }
 
 #macos-scrollbar.show {
-    opacity: 0.7;
+    opacity: 1; /* Muncul saat class ini ditambahkan oleh JS */
 }
+
 
 /* ============================================
    HEADER GLASSMORPHISM
    ============================================ */
 .landing-header {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--border-color);
     width: 100%;
     padding: 1.5rem 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--bg-glass);
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-glass);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -114,6 +97,7 @@ body {
     align-items: center;
     gap: 1rem;
     text-decoration: none;
+    color: #fff;
 }
 
 .brand-icon {
@@ -121,28 +105,18 @@ body {
     background: linear-gradient(135deg, var(--kemenkes-primary), var(--kemenkes-blue));
     border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 10px rgba(0, 169, 157, 0.2);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
 }
 
-.brand-icon svg { stroke: #ffffff; } /* Memastikan ikon di dalam kotak tetap putih */
-
-.brand-text h1 { 
-    font-size: 1.2rem; 
-    font-weight: 700; 
-    letter-spacing: -0.02em; 
-    color: var(--text-main); 
-}
-.brand-text p { 
-    font-size: 0.75rem; 
-    color: var(--text-muted); 
-}
+.brand-text h1 { color: var(--kemenkes-primary); }
+.brand-text p { color: var(--text-muted); }
 
 .login-btn {
     padding: 0.6rem 1.5rem;
-    background: var(--kemenkes-primary); /* Tombol Toska */
+    background: var(--kemenkes-primary);
+    color: #fff;
     border: none;
     border-radius: 99px;
-    color: #fff;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
@@ -152,7 +126,7 @@ body {
 .login-btn:hover {
     background: var(--kemenkes-blue);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 173, 239, 0.3);
+    box-shadow: var(--shadow-toska);
 }
 
 /* ============================================
@@ -178,7 +152,7 @@ body {
 
 .hero-subtitle {
     font-size: 1.1rem;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.7);
     margin-bottom: 3rem;
     max-width: 600px;
 }
@@ -195,19 +169,24 @@ body {
     padding: 1.25rem 1.5rem 1.25rem 3.5rem;
     font-size: 1.1rem;
     color: var(--text-main);
-    background: #ffffff;
-    border: 1px solid var(--border-glass);
+    background: white;
+    border: 2px solid var(--border-color);
     border-radius: 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     outline: none;
     transition: all 0.3s ease;
-    box-shadow: var(--shadow-soft);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.search-input::placeholder { color: #94A3B8; }
+.search-input::placeholder { 
+    color: #94A3B8; /* Abu-abu slate yang elegan untuk tema terang */
+    opacity: 1; /* Pastikan warnanya solid (tidak transparan oleh default browser) */
+}
 
 .search-input:focus {
     border-color: var(--kemenkes-primary);
-    box-shadow: 0 0 0 4px rgba(0, 169, 157, 0.1), var(--shadow-soft);
+    box-shadow: 0 0 0 4px rgba(0, 169, 157, 0.1);
 }
 
 .search-icon {
@@ -215,7 +194,7 @@ body {
     left: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--kemenkes-primary);
+    color: rgba(255, 255, 255, 0.5);
     width: 24px; height: 24px;
 }
 
@@ -235,10 +214,10 @@ body {
 }
 
 .card-unit {
-    background: var(--bg-glass);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--border-glass);
+    border: 1px solid var(--border-color);
     border-radius: 24px;
     padding: 2rem 1.5rem;
     text-align: center;
@@ -254,15 +233,15 @@ body {
 }
 
 .card-unit:hover {
-    transform: translateY(-10px);
-    background: #ffffff;
+    transform: translateY(-10px) scale(1.02);
     border-color: var(--kemenkes-primary);
-    box-shadow: var(--shadow-hover);
+    background: #FFFFFF;
+    box-shadow: var(--shadow-toska);
 }
 
 .card-icon {
     width: 64px; height: 64px;
-    background: rgba(0, 169, 157, 0.05); /* Toska pudar */
+    background: #F0FDFA;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     color: var(--kemenkes-primary);
@@ -270,9 +249,9 @@ body {
 }
 
 .card-unit:hover .card-icon {
-    background: linear-gradient(135deg, var(--kemenkes-primary), var(--kemenkes-blue));
+    background: var(--kemenkes-primary);
     color: #fff;
-    box-shadow: 0 10px 20px rgba(0, 169, 157, 0.25);
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
 }
 
 .card-title {
@@ -286,7 +265,7 @@ body {
     grid-column: 1 / -1;
     text-align: center;
     padding: 3rem;
-    color: var(--text-muted);
+    color: rgba(255,255,255,0.6);
     font-size: 1.1rem;
     display: none;
 }

@@ -30,20 +30,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     /* ==================================================
-       VIRTUAL MACOS SCROLLBAR LOGIC (OPTIMIZED FOR 60FPS)
+       VIRTUAL MACOS SCROLLBAR LOGIC
        ================================================== */
+    // 1. Buat elemen scrollbar dan masukkan ke body
     const scrollbar = document.createElement('div');
     scrollbar.id = 'macos-scrollbar';
     document.body.appendChild(scrollbar);
 
     let scrollTimeout;
-    let ticking = false; // "Rem" untuk requestAnimationFrame
 
     function updateScrollbar() {
         const docHeight = document.documentElement.scrollHeight;
         const winHeight = window.innerHeight;
 
-        // Jika halaman tidak bisa discroll, sembunyikan
+        // Jika halaman tidak panjang (tidak butuh scroll), sembunyikan
         if (docHeight <= winHeight) {
             scrollbar.style.display = 'none';
             return;
@@ -51,42 +51,31 @@ document.addEventListener('DOMContentLoaded', function() {
             scrollbar.style.display = 'block';
         }
 
-        // Hitung tinggi scrollbar (dinamis)
+        // Hitung tinggi scrollbar (dinamis sesuai panjang konten, minimal 40px)
         const scrollbarHeight = Math.max((winHeight / docHeight) * winHeight, 40);
         scrollbar.style.height = `${scrollbarHeight}px`;
 
-        // Hitung posisi Y
+        // Hitung posisi Y (turun/naik)
         const scrollY = window.scrollY;
         const maxScrollY = docHeight - winHeight;
         const maxTop = winHeight - scrollbarHeight;
         const scrollbarTop = (scrollY / maxScrollY) * maxTop;
 
-        // GANTI PENGGUNAAN 'top' DENGAN 'transform' (Diproses GPU = Super Smooth)
-        scrollbar.style.transform = `translateY(${scrollbarTop}px)`;
+        scrollbar.style.top = `${scrollbarTop}px`;
 
-        // Tampilkan scrollbar
+        // Tampilkan scrollbar (Animasi Smooth Fade-In)
         scrollbar.classList.add('show');
 
-        // Hilangkan scrollbar setelah 1 detik tidak ada pergerakan
+        // Hilangkan scrollbar setelah 1 detik tidak ada pergerakan (Smooth Fade-Out)
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
             scrollbar.classList.remove('show');
         }, 1000);
     }
 
-    // Gunakan requestAnimationFrame agar animasi menyesuaikan refresh rate monitor
-    function onScroll() {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                updateScrollbar();
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true }); // passive: true membantu browser melakukan scroll native lebih cepat
-    window.addEventListener('resize', onScroll);
+    // Picu fungsi saat user melakukan scroll atau mengubah ukuran layar
+    window.addEventListener('scroll', updateScrollbar);
+    window.addEventListener('resize', updateScrollbar);
     
     // Panggil sekali di awal untuk kalkulasi
     updateScrollbar();
