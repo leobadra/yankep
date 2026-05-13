@@ -1,5 +1,25 @@
 /* ============================================
-   RESET & MACOS SCROLLBAR
+   ROOT VARIABLES (TEMA KEMENKES)
+   ============================================ */
+:root {
+    /* Palet Warna Utama */
+    --kemenkes-primary: #00A99D;    /* Hijau Toska */
+    --kemenkes-blue: #00ADEF;       /* Biru Kemenkes */
+    
+    /* Backgrounds & Text */
+    --bg-body: #F4F7FB;             /* Abu-abu biru sangat muda untuk layar belakang */
+    --bg-glass: rgba(255, 255, 255, 0.85); /* Efek kaca untuk card/header */
+    --text-main: #1E293B;           /* Biru dongker untuk teks utama */
+    --text-muted: #64748B;          /* Abu-abu untuk teks sekunder */
+    
+    /* Borders & Shadows */
+    --border-glass: rgba(0, 169, 157, 0.2); 
+    --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.04);
+    --shadow-hover: 0 15px 35px rgba(0, 169, 157, 0.15);
+}
+
+/* ============================================
+   RESET & HIDE NATIVE SCROLLBAR
    ============================================ */
 *, *::before, *::after {
     margin: 0;
@@ -7,61 +27,29 @@
     box-sizing: border-box;
 }
 
-/* ============================================
-   RESET & SCROLLBAR MACOS STYLE
-   ============================================ */
 html {
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    /* Kunci sumbu X agar halaman tidak bocor/terpotong di sisi kanan */
-    overflow-x: hidden; 
+    overflow-x: hidden;
+    scrollbar-width: none; /* Menyembunyikan scrollbar di Firefox */
 }
 
-/* Hanya bekerja pada Webkit (Chrome, Safari, Edge) */
+/* Sembunyikan scrollbar bawaan sepenuhnya di Chrome/Safari/Edge */
 ::-webkit-scrollbar {
-    width: 8px; /* Dibuat tipis dan elegan ala MacOS */
-    background: transparent; 
-}
-
-::-webkit-scrollbar-track {
-    background: transparent; /* Track sepenuhnya tembus pandang */
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: rgba(200, 200, 200, 0.3); /* Warna transparan saat diam */
-    border-radius: 10px;
-    transition: background-color 0.3s ease;
-}
-
-/* Scrollbar menjadi lebih jelas HANYA saat kursor diarahkan ke area scroll */
-::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(200, 200, 200, 0.7); 
-}
-
-::-webkit-scrollbar-thumb:active {
-    background-color: rgba(150, 150, 150, 0.9);
+    width: 0;
+    background: transparent;
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--gray-900);
-    color: var(--gray-700);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
     min-height: 100vh;
-    width: 100%; /* Gunakan 100% (bukan 100vw) agar scrollbar tidak memotong margin */
-    overflow-x: hidden; /* Cegah scroll horizontal mutlak */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    overflow-x: hidden;
+    
+    /* Background Kemenkes (Putih - Biru Muda) */
+    background: radial-gradient(circle at top right, #FFFFFF 0%, var(--bg-body) 100%);
+    color: var(--text-main); /* Mengubah warna teks dasar */
     position: relative;
-    padding: 2rem 1rem;
-}
-
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
 }
 
 /* Floating Orbs (Aksen Latar Belakang) */
@@ -70,15 +58,35 @@ body {
     border-radius: 50%;
     filter: blur(80px);
     z-index: -1;
-    opacity: 0.5;
+    opacity: 0.6;
     animation: float 20s infinite ease-in-out;
 }
-.orb-1 { width: 400px; height: 400px; background: #6366f1; top: -10%; left: -10%; }
-.orb-2 { width: 500px; height: 500px; background: #06b6d4; bottom: -20%; right: -10%; animation-delay: -5s; }
+/* Mengubah warna orb menjadi Toska dan Biru Kemenkes */
+.orb-1 { width: 400px; height: 400px; background: rgba(0, 169, 157, 0.15); top: -10%; left: -5%; }
+.orb-2 { width: 500px; height: 500px; background: rgba(0, 173, 239, 0.1); bottom: -10%; right: -5%; animation-delay: -5s; }
 
 @keyframes float {
     0%, 100% { transform: translateY(0) scale(1); }
     50% { transform: translateY(-30px) scale(1.05); }
+}
+
+/* ============================================
+   CUSTOM MACOS VIRTUAL SCROLLBAR
+   ============================================ */
+#macos-scrollbar {
+    position: fixed;
+    right: 4px;
+    width: 6px;
+    background-color: var(--kemenkes-primary); /* Mengubah warna scrollbar menjadi Toska */
+    border-radius: 10px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+#macos-scrollbar.show {
+    opacity: 0.7; /* Tidak terlalu pekat agar tetap elegan */
 }
 
 /* ============================================
@@ -90,10 +98,10 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-glass);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-glass);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -104,24 +112,33 @@ body {
     align-items: center;
     gap: 1rem;
     text-decoration: none;
-    color: #fff;
 }
 
 .brand-icon {
     width: 40px; height: 40px;
-    background: linear-gradient(135deg, #6366f1, #06b6d4);
+    background: linear-gradient(135deg, var(--kemenkes-primary), var(--kemenkes-blue));
     border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 4px 10px rgba(0, 169, 157, 0.2);
 }
 
-.brand-text h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; }
-.brand-text p { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
+.brand-icon svg { stroke: #ffffff; } /* Memastikan ikon di dalam kotak tetap putih */
+
+.brand-text h1 { 
+    font-size: 1.2rem; 
+    font-weight: 700; 
+    letter-spacing: -0.02em; 
+    color: var(--text-main); 
+}
+.brand-text p { 
+    font-size: 0.75rem; 
+    color: var(--text-muted); 
+}
 
 .login-btn {
     padding: 0.6rem 1.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--kemenkes-primary); /* Tombol Toska */
+    border: none;
     border-radius: 99px;
     color: #fff;
     text-decoration: none;
@@ -131,9 +148,9 @@ body {
 }
 
 .login-btn:hover {
-    background: #fff;
-    color: #0f172a;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    background: var(--kemenkes-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 173, 239, 0.3);
 }
 
 /* ============================================
@@ -151,14 +168,15 @@ body {
     font-size: 3rem;
     font-weight: 800;
     margin-bottom: 1rem;
-    background: linear-gradient(to right, #fff, #a5b4fc);
+    background: linear-gradient(to right, var(--kemenkes-primary), var(--kemenkes-blue));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .hero-subtitle {
     font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-muted);
     margin-bottom: 3rem;
     max-width: 600px;
 }
@@ -174,23 +192,20 @@ body {
     width: 100%;
     padding: 1.25rem 1.5rem 1.25rem 3.5rem;
     font-size: 1.1rem;
-    color: #fff;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-main);
+    background: #ffffff;
+    border: 1px solid var(--border-glass);
     border-radius: 20px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     outline: none;
     transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-soft);
 }
 
-.search-input::placeholder { color: rgba(255, 255, 255, 0.5); }
+.search-input::placeholder { color: #94A3B8; }
 
 .search-input:focus {
-    border-color: #818cf8;
-    background: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2), 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-color: var(--kemenkes-primary);
+    box-shadow: 0 0 0 4px rgba(0, 169, 157, 0.1), var(--shadow-soft);
 }
 
 .search-icon {
@@ -198,7 +213,7 @@ body {
     left: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--kemenkes-primary);
     width: 24px; height: 24px;
 }
 
@@ -218,43 +233,44 @@ body {
 }
 
 .card-unit {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-glass);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-glass);
     border-radius: 24px;
     padding: 2rem 1.5rem;
     text-align: center;
     text-decoration: none;
-    color: #fff;
+    color: var(--text-main);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
     cursor: pointer;
+    box-shadow: var(--shadow-soft);
 }
 
 .card-unit:hover {
-    transform: translateY(-10px) scale(1.02);
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(99, 102, 241, 0.2);
+    transform: translateY(-10px);
+    background: #ffffff;
+    border-color: var(--kemenkes-primary);
+    box-shadow: var(--shadow-hover);
 }
 
 .card-icon {
     width: 64px; height: 64px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 169, 157, 0.05); /* Toska pudar */
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    color: #a5b4fc;
+    color: var(--kemenkes-primary);
     transition: all 0.3s ease;
 }
 
 .card-unit:hover .card-icon {
-    background: linear-gradient(135deg, #6366f1, #06b6d4);
+    background: linear-gradient(135deg, var(--kemenkes-primary), var(--kemenkes-blue));
     color: #fff;
-    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 169, 157, 0.25);
 }
 
 .card-title {
@@ -268,7 +284,7 @@ body {
     grid-column: 1 / -1;
     text-align: center;
     padding: 3rem;
-    color: rgba(255,255,255,0.6);
+    color: var(--text-muted);
     font-size: 1.1rem;
     display: none;
 }
