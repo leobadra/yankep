@@ -7,32 +7,55 @@
     box-sizing: border-box;
 }
 
-/* MacOS Style Scrollbar */
+/* ============================================
+   RESET & SCROLLBAR MACOS STYLE
+   ============================================ */
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Kunci sumbu X agar halaman tidak bocor/terpotong di sisi kanan */
+    overflow-x: hidden; 
+}
+
+/* Hanya bekerja pada Webkit (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 8px; /* Dibuat tipis dan elegan ala MacOS */
+    background: transparent; 
 }
+
 ::-webkit-scrollbar-track {
-    background: transparent;
+    background: transparent; /* Track sepenuhnya tembus pandang */
 }
+
 ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
+    background-color: rgba(200, 200, 200, 0.3); /* Warna transparan saat diam */
     border-radius: 10px;
+    transition: background-color 0.3s ease;
 }
+
+/* Scrollbar menjadi lebih jelas HANYA saat kursor diarahkan ke area scroll */
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
+    background-color: rgba(200, 200, 200, 0.7); 
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: rgba(150, 150, 150, 0.9);
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--gray-900);
+    color: var(--gray-700);
     min-height: 100vh;
-    overflow-x: hidden;
-    /* Animated Mesh Gradient Background */
-    background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #0f172a);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-    color: #ffffff;
+    width: 100%; /* Gunakan 100% (bukan 100vw) agar scrollbar tidak memotong margin */
+    overflow-x: hidden; /* Cegah scroll horizontal mutlak */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: relative;
+    padding: 2rem 1rem;
 }
 
 @keyframes gradientBG {
