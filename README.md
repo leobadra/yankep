@@ -1,0 +1,2 @@
+# yankep
+Karya Nurse Informatika
