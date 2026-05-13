@@ -1,7 +1,64 @@
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
+
+    /* ==================================================
+       EFEK TYPING PLACEHOLDER OTOMATIS
+       ================================================== */
+    const searchInput = document.getElementById('searchInput');
+    
+    // Daftar kata-kata yang akan diketik bergantian
+    const placeholderTexts = [
+        "Cari unit atau ruangan...",
+        "Ketik 'IGD' untuk Gawat Darurat...",
+        "Ketik 'ICU' untuk Perawatan Intensif...",
+        "Ketik 'IBS' untuk Bedah Sentral...",
+        "Ketik 'Timkeryankep'..."
+    ];
+    
+    let textIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    
+    function typeEffect() {
+        const currentText = placeholderTexts[textIndex];
+        
+        // Menentukan teks yang muncul berdasarkan proses (mengetik atau menghapus)
+        if (isDeleting) {
+            searchInput.setAttribute('placeholder', currentText.substring(0, charIndex));
+            charIndex--;
+        } else {
+            searchInput.setAttribute('placeholder', currentText.substring(0, charIndex));
+            charIndex++;
+        }
+        
+        // Mengatur kecepatan mengetik dan menghapus
+        let typingSpeed = isDeleting ? 40 : 80;
+        
+        // Logika saat kata selesai diketik
+        if (!isDeleting && charIndex > currentText.length) {
+            typingSpeed = 2000; // Jeda 2 detik sebelum mulai menghapus
+            isDeleting = true;
+        } 
+        // Logika saat kata selesai dihapus
+        else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            textIndex = (textIndex + 1) % placeholderTexts.length; // Pindah ke kata berikutnya
+            typingSpeed = 500; // Jeda setengah detik sebelum mengetik kata baru
+        }
+        
+        setTimeout(typeEffect, typingSpeed);
+    }
+    
+    // Memulai animasi
+    typeEffect();
+
+
+    /* ==================================================
+       LOGIKA PENCARIAN GRID (Biarkan kode lama Anda di bawah ini)
+       ================================================== */
     const cards = document.querySelectorAll('.card-unit');
     const noResults = document.getElementById('noResults');
+    
 
     // Event listener saat user mengetik
     searchInput.addEventListener('input', function(e) {
