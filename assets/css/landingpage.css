@@ -75,18 +75,20 @@ body {
    ============================================ */
 #macos-scrollbar {
     position: fixed;
+    top: 0; /* Tambahkan ini sebagai titik awal */
     right: 4px;
     width: 6px;
-    background-color: var(--kemenkes-primary); /* Mengubah warna scrollbar menjadi Toska */
+    background-color: var(--kemenkes-primary);
     border-radius: 10px;
     z-index: 9999;
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.4s ease; /* Transisi HANYA untuk opacity (muncul/hilang) */
     pointer-events: none;
+    will-change: transform, opacity; /* Beritahu GPU untuk bersiap menganimasi ini */
 }
 
 #macos-scrollbar.show {
-    opacity: 0.7; /* Tidak terlalu pekat agar tetap elegan */
+    opacity: 0.7;
 }
 
 /* ============================================
